@@ -41,8 +41,10 @@ Version: ```Debian(64-bit)```
 1. 도메인네임은 빈칸으로 넘어감
 1. root 비밀번호 입력
 1. root 비밀번호 재입력
-1. user 이름 입력
-1. user ID 입력 (user 이름이 자동으로 적혀있음)
+1. user 이름 입력   
+```eujeong```
+1. user ID 입력 (user 이름이 자동으로 적혀있음)   
+```eujeong```
 1. user 비밀번호 입력
 1. user 비밀번호 재입력
 1. 암호화된 LVM을 선택   
@@ -59,6 +61,7 @@ Version: ```Debian(64-bit)```
 1. 더 읽을 파일 있는지 ```No```
 1. update, upgrade, 프로그램 추가를 위한 네트워크 미러 사이트 설정   
 ```Korea, Requblic of```
+1. 다음 그냥 엔터
 1. 프록시 설정 (그냥 ```Continue```)
 1. 통계자료 보내기 ```No```
 1. 추가로 설치할 소프트웨어 선택 (그냥 ```Continue```)
@@ -70,7 +73,55 @@ Version: ```Debian(64-bit)```
 1. root로 로그인
 1. ```lsblk``` 를 입력해보면 파티셔닝된 디바이스 정보 확인 가능
 
-## sudo적용
+## sudo 설치 및 설정
+
+1. root로 로그인
+1. sudo가 설치되어 있는지 확인   
+```dpkg -l sudo```
+1. 설치되어 있지 않다면 sudo 설치   
+```apt update```   
+```apt install sudo```
+1. ```visudo``` 명령어로 sudoers 파일에 접근하여 아래와 같이 설정해주기
+> sudoers파일은 일반 편집기로 접근하면 많은 제약이 있다.   
+> 직접 /etc/sudoers 파일을 편집하다가 실수가 발생하면, sudo를 사용할 수 없게 된다.   
+>visudo는 문법체크를 해준다.
+
+secure_path에 ```/snap/bin``` 추가
+```shell
+secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+```
+>sudo명령 실행 시 현재 계정의 쉘이 아닌 새로운 쉘을 생성하고 그 안에서 명령을 실행하는데, 이 때 명령을 찾을 경로를 나열한 환경변수인 PATH값이 바로 secure_path
+> 
+> 트로이목마 해킹 공격에 대한 일차적인 방어 기능을 제공.(사용자의 부주의로 현재 계정의 PATH에 악의적인 경로가 포함된 경우, 이를 무시함으로써 sudo를 통한 전체 시스템에 해킹되는 경우를 방지
+
+그 밑에 다른 정책들 추가
+```shell
+Defaults	authfail_message="원하는 에러메세지" #권한 획득 실패 시 출력 (sudo 인증 실패 시)
+Defaults	badpass_message="원하는 에러메세지" #sudo인증에서 비밀번호 틀리면 출력
+Defaults	iolog_dir="/var/log/sudo/" #sudo log 저장 디렉토리 설정
+Defaults	log_input #sudo명령어 실행 시 입력된 명령어 log로 저장
+Defaults	log_output #sudo명령어 실행 시 출력 결과를 log로 저장
+Defaults	requiretty #sudo명령어 실행 시 tty강제
+Defaults	passwd_tries=3 #sudo실행 횟수를 지정. default가 3
+```
+이후 ```ctr + x```를 누른 후 ```y```를 누르고 엔터를 치면 저장하고 나가진다.
+
+5. ```visudo```를 한번 더 해서 제대로 입력되었는지 확인
+5. ```/var/log/sudo/```에서 log를 확인할 수 있다.
+
+## 그룹 설정
+
+1. user42 그룹 추가   
+```groupadd user42```
+1. sudo, user42 그룹에 사용자 추가   
+```usermod -aG sudo,user42 <사용자ID>```
+1. user42 그룹이 primary group이 되도록 한다   
+```usermod -g user42 <사용자ID>```
+> -g : 사용자의 그룹을 변경   
+> -G : 추가로 다른 그룹에 속하게 할 때 쓰임. G옵션만 붙힌 상태에서 그룹 설정 시, gid그룹들을 제외하고 명령어에 나열된 그룹만 추가가 되며 명령어에 나열되어 있지 않지만 유저가 속해있는 그룹은 전부 탈퇴된다.
+> 
+> -a : G옵션에서만 함께 쓰일 수 있고, G옵션만 붙었을 때와 달리, 유저가 속해있지만 명령어에 나열되어있지 않는 그룹에 관하여 탈퇴처리 되지 않는다. 
+
 
 ## UFW / 설정하기
 
