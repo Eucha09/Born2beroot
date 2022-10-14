@@ -128,11 +128,11 @@ Version: ```Debian(64-bit)```
 ```apt install vim```
 1. .vimrc 파일을 열어 아래와 같이 설정 (간단하게 기본적인 것만 설정)   
 ```vi ~/.vimrc```
-```shell
-syntax on
-set number
-set mouse=a
-```
+	```shell
+	syntax on
+	set number
+	set mouse=a
+	```
 
 ## UFW 설치 및 설정
 
@@ -168,9 +168,26 @@ set mouse=a
 1. ssh 상태 확인 (실행여부와 사용포트 확인)   
 ```systemctl status ssh```
 
-### Client와 SSH 연결
+### 로컬 PC(Client)에서 가상머신(Server)에 접속하는법
 
-1. 
+1. ```ifconfig``` 명령어를 통해 실제 머신의 ip주소를 확인한다.
+1. ```ifconfig``` 혹은 ```hostname -I```를 통해 가상머신의 ip주소를 확인한다.
+1. VirtualBox에서 가상머신을 선택 후 상단에 ```Settings```->```Network```->```Adapter1```->```Advanced```->```Port Forwarding```에 들어간다.
+1. 우측에 add 버튼을 누른 후 아래와 같이 입력한다.
+	| Host IP | Host Port | Guest IP | Guest Port |
+	| ------- | --------- | -------- | ---------- |
+	| 실제 머신의 ip주소 | 아무숫자 | 가상머신의 ip주소 | 4242 |
+	
+	ex)
+	| Host IP | Host Port | Guest IP | Guest Port |
+	| ------- | --------- | -------- | ---------- |
+	| 10.28.4.9 | 4242 | 10.0.2.15 | 4242 |
+	> 포트포워딩을 통해 ```10.28.4.9:4242``` 에 접속시도를 했을 때 ```10.0.2.15:4242```로 연결시켜준다.
+1. 가상머신을 다시 실행시킨 후 클라이언트 측에선 아래 명령어로 가상머신에 접속할 수 있다.
+	```shell
+	ssh <계정이름>@<서버주소> -p <포트번호>
+	#ex) ssh eujeong@10.28.4.9 -P 4242
+	```
 
 ## 비밀번호 정책 설정
 
