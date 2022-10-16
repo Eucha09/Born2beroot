@@ -4,6 +4,17 @@
 VM: **VirtualBox**   
 OS: **Debian(Linux)**
 
+**Contents**
+- 가상머신 및 OS 설치 (VirtualBox, Debian)
+- sudo 설치 및 설정
+- 그룹 설정
+- vim 설치 및 설정
+- UFW 설치 및 설정
+- SSH 설치 및 설정
+- 비밀번호 정책 설정
+- 모니터링(cron, monitoring.sh)
+- 기타 정리
+
 ## 가상머신 및 OS 설치 (VirtualBox, Debian)
 
 1. VirtualBox 설치
@@ -222,7 +233,7 @@ Version: ```Debian(64-bit)```
 사용자가 다시 로그인을 해보면 비밀번호를 변경하라고 뜬다.
 	> ```-e```: 강제적으로 사용자의 암호를 만료시킨다.
 
-## cron, monitoring.sh
+## 모니터링(cron, monitoring.sh)
 
 일정한 시간마다 모든 터미널에 아래 정보를 표시하는 스크립트를 작성
 - 운영체제 및 커널 버전의 아키텍처
@@ -314,3 +325,6 @@ ex)
 	아래와 같이 입력하여 주기 설정   
 	```*/10 * * * * /root/monitoring.sh | wall```
 	> 10분마다 monitoring.sh 스크립트를 실행시켜 모든 유저들에게 보내겠다는 의미
+
+## 기타 정리
+
