@@ -87,7 +87,7 @@ Version: ```Debian(64-bit)```
 	>visudo는 문법체크를 해준다.
 
 	secure_path에 ```/snap/bin``` 추가
-	```shell
+	```sh
 	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 	```
 	>sudo명령 실행 시 현재 계정의 쉘이 아닌 새로운 쉘을 생성하고 그 안에서 명령을 실행하는데, 이 때 명령을 찾을 경로를 나열한 환경변수인 PATH값이 바로 secure_path
@@ -95,7 +95,7 @@ Version: ```Debian(64-bit)```
 	> 트로이목마 해킹 공격에 대한 일차적인 방어 기능을 제공.(사용자의 부주의로 현재 계정의 PATH에 악의적인 경로가 포함된 경우, 이를 무시함으로써 sudo를 통한 전체 시스템에 해킹되는 경우를 방지
 
 	그 밑에 다른 정책들 추가
-	```shell
+	```sh
 	Defaults	authfail_message="원하는 에러메세지" #권한 획득 실패 시 출력 (sudo 인증 실패 시)
 	Defaults	badpass_message="원하는 에러메세지" #sudo인증에서 비밀번호 틀리면 출력
 	Defaults	iolog_dir="/var/log/sudo/" #sudo log 저장 디렉토리 설정
@@ -195,7 +195,7 @@ Version: ```Debian(64-bit)```
 1. ```/etc/login.defs```파일을 열어 아래와 같이 기본 정책 설정   
 ```vi /etc/login.defs```   
 (좀 많이 내려가야 있음)
-	```shell
+	```sh
 	PASS_MAX_DAYS 30	#패스워드 최대 사용일
 	PASS_MIN_DATS 2		#패스워드 최소 사용일
 	PASS_WARN_AGE 7		#패스워드 만료 경고일
@@ -205,7 +205,7 @@ Version: ```Debian(64-bit)```
 1. /etc/pam.d/common-password 파일을 열어 패스워드 강도 정책 설정   
 ```vi /etc/pam.d/common-password ```   
 ```pam_pwquality.so retry=3``` 뒤에 이어 아래와 같이 설정하면 된다.
-	```shell
+	```sh
 	pam_pwquality.so retry=3 minlen=10 ucredit=-1 lcredit=-1 dcredit=-1 maxrepeat=3 reject_username enforce_for_root difok=7
 	```
 	> ```retry=N```: 암호입력을 N회로 설정   
@@ -222,6 +222,95 @@ Version: ```Debian(64-bit)```
 사용자가 다시 로그인을 해보면 비밀번호를 변경하라고 뜬다.
 	> ```-e```: 강제적으로 사용자의 암호를 만료시킨다.
 
-## 호스트네임과 파티셔닝
-
 ## cron, monitoring.sh
+
+일정한 시간마다 모든 터미널에 아래 정보를 표시하는 스크립트를 작성
+- 운영체제 및 커널 버전의 아키텍처
+- 물리적 프로세서의 수
+- 가상 프로세서 개수
+- 서버에서 현재 사용 가능한 RAM용량 및 사용률(백분율)
+- 서버에서 사용 가능한 현재 디스크공간 및 사용률(백분율)
+- 프로세서(CPU)의 현재 사용률(백분율)
+- 마지막으로 부팅한 날짜 및 시간
+- LVM의 활성 여부
+- 활성 연결 수
+- 서버를 사용하는 사용자 수
+- 서버의 IPv4 주소와 해당 MAC 주소
+- sudo 프로그램으로 실행된 명령 수
+
+ex)
+```
+#Architecture: Linux wil 4.19.0-16-amd64 #1 SMP Debian 4.19.181-1 (2021-03-19) x86_64 GNU/Linux
+#CPU physical : 1
+#vCPU : 1
+#Memory Usage: 74/987MB (7.50%)
+#Disk Usage: 1009/2Gb (39%)
+#CPU load: 6.7%
+#Last boot: 2021-04-25 14:45
+#LVM use: yes
+#Connexions TCP : 1 ESTABLISHED
+#User log: 1
+#Network: IP 10.0.2.15 (08:00:27:51:9b:a5)
+#Sudo : 42 cmd
+```
+
+1. CPU, memory, networking 등 기타 리소스에 대한 정보를 확인할 수 있는 패키지 설치   
+```apt install sysstat```
+1. monitoring.sh 작성   
+```vi /root/monitoring.sh```
+	```sh
+	printf "#Architecture: "
+	uname -a
+
+	printf "#CPU physical : "
+	nproc --all
+
+	printf "#vCPU : "
+	cat /proc/cpuinfo | grep processor | wc -l
+
+	printf "#Memory Usage: "
+	free -m | grep Mem | awk '{printf"%d/%dMB (%.2f%%)\n", $3, $2, $3/$2 * 100}'
+
+	printf "#Disk Usage: "
+	df -a -BM | grep /dev/map | awk '{sum+=$3}END{print sum}' | tr -d '\n'
+	printf "/"
+	df -a -BM | grep /dev/map | awk '{sum+=$4}END{print sum}' | tr -d '\n'
+	printf "MB ("
+	df -a -BM | grep /dev/map | awk '{sum1+=$3 ; sum2+=$4 }END{printf "%d", sum1 / sum2 * 100}' | tr -d '\n'
+	printf "%%)\n"
+
+	printf "#CPU load: "
+	mpstat | grep all | awk '{printf "%.2f%%\n", 100-$13}'
+
+	printf "#Last boot: "
+	who -b | awk '{printf $3" "$4"\n"}'
+
+	printf "#LVM use: "
+	if [ "$(lsblk | grep lvm | wc -l)" -gt 0 ] ; then printf "yes\n" ; else printf "no\n" ; fi
+
+	printf "#Connections TCP : "
+	ss | grep -i tcp | wc -l | tr -d '\n'
+	printf " ESTABLISHED\n"
+
+	printf "#User log: "
+	who | wc -l
+
+	printf "#Network: IP "
+	hostname -I | tr -d '\n'
+	printf "("
+	ip link show | awk '$1 == "link/ether" {print $2}' | sed '2, $d' | tr -d '\n'
+	printf ")\n"
+
+	printf "#Sudo : "
+	journalctl _COMM=sudo | wc -l | tr -d '\n'
+	printf " cmd\n"
+	```
+1. monitoring.sh에 실행권환 설정  
+```chmod +x monitoring.sh```
+1. cron을 사용하여 일정한 시간마다 스크립트를 실행시켜 모든 유저들에게 보내기   
+```crontab -e```
+	> ```-e```: visual 편집기 모드
+	
+	아래와 같이 입력하여 주기 설정   
+	```*/10 * * * * /root/monitoring.sh | wall```
+	> 10분마다 monitoring.sh 스크립트를 실행시켜 모든 유저들에게 보내겠다는 의미
