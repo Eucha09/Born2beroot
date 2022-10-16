@@ -117,16 +117,16 @@ Version: ```Debian(64-bit)```
 ```usermod -aG sudo,user42 <사용자ID>```
 1. user42 그룹이 기본 그룹이 되도록 한다   
 ```usermod -g user42 <사용자ID>```
-	> -g : 사용자의 기본 그룹을 변경   
-	> -G : 추가로 다른 그룹에 속하게 할 때 쓰임. G옵션만 붙힌 상태에서 그룹 설정 시, gid그룹(기본그룹)을 제외하고 명령어에 나열된 그룹만 추가가 되며 명령어에 나열되어 있지 않지만 유저가 속해있는 그룹은 전부 탈퇴된다.   
-	> -a : G옵션에서만 함께 쓰일 수 있고, G옵션만 붙었을 때와 달리, 유저가 속해있지만 명령어에 나열되어있지 않는 그룹에 관하여 탈퇴처리 되지 않는다. 
+	> ```-g``` : 사용자의 기본 그룹을 변경   
+	> ```-G``` : 추가로 다른 그룹에 속하게 할 때 쓰임. G옵션만 붙힌 상태에서 그룹 설정 시, gid그룹(기본그룹)을 제외하고 명령어에 나열된 그룹만 추가가 되며 명령어에 나열되어 있지 않지만 유저가 속해있는 그룹은 전부 탈퇴된다.   
+	> ```-a``` : G옵션에서만 함께 쓰일 수 있고, G옵션만 붙었을 때와 달리, 유저가 속해있지만 명령어에 나열되어있지 않는 그룹에 관하여 탈퇴처리 되지 않는다. 
 
 ## vim 설치 및 설정
 
 1. root로 로그인
 1. vim 설치   
 ```apt install vim```
-1. .vimrc 파일을 열어 아래와 같이 설정 (간단하게 기본적인 것만 설정)   
+1. ```.vimrc``` 파일을 열어 아래와 같이 설정 (간단하게 기본적인 것만 설정)   
 ```vi ~/.vimrc```
 	```shell
 	syntax on
@@ -157,12 +157,12 @@ Version: ```Debian(64-bit)```
 ```apt search openssh-server```   
 설치가 안되어 있다면 설치   
 ```apt install openssh-server```
-1. sshd_config파일을 열어 아래와 같이 설정   
+1. ```/etc/ssh/sshd_config```파일을 열어 아래와 같이 설정   
 ```vim /etc/ssh/sshd_config```   
 ```#Port 22```를 ```Port 4242```로 변경 (#을 지워야 함)   
 ```#PermitRootLogin prohibit-password```를 ```PermitRootLogin no```로 변경   
 해당 옵션은 외부에서 root로 로그인하는 것을 막는 것이다.
-	> /etc/ssh에는 ssh_config와 sshd_config가 있다. 전자는 client측일 때 설정, 후자는 server측일 때 설정이다.
+	> ```/etc/ssh```에는 ```ssh_config```와 ```sshd_config```가 있다. 전자는 client측일 때 설정, 후자는 server측일 때 설정이다.
 1. ssh를 재시작하여 설정 적용   
 ```systemctl restart ssh```
 1. ssh 상태 확인 (실행여부와 사용포트 확인)   
@@ -190,6 +190,37 @@ Version: ```Debian(64-bit)```
 	```
 
 ## 비밀번호 정책 설정
+
+1. root로 로그인
+1. ```/etc/login.defs```파일을 열어 아래와 같이 기본 정책 설정   
+```vi /etc/login.defs```   
+(좀 많이 내려가야 있음)
+	```shell
+	PASS_MAX_DAYS 30	#패스워드 최대 사용일
+	PASS_MIN_DATS 2		#패스워드 최소 사용일
+	PASS_WARN_AGE 7		#패스워드 만료 경고일
+	```
+1. 패스워드 정책 설정을 위한 모듈 설치   
+```apt install libpam-pwquality```
+1. /etc/pam.d/common-password 파일을 열어 패스워드 강도 정책 설정   
+```vi /etc/pam.d/common-password ```   
+```pam_pwquality.so retry=3``` 뒤에 이어 아래와 같이 설정하면 된다.
+	```shell
+	pam_pwquality.so retry=3 minlen=10 ucredit=-1 lcredit=-1 dcredit=-1 maxrepeat=3 reject_username enforce_for_root difok=7
+	```
+	> ```retry=N```: 암호입력을 N회로 설정   
+	> ```minlen=N```: 암호의 최소 길이는 N   
+	> ```ucredit=-N```: 대문자 N개 이상   
+	> ```lcredit=-N```: 소문자 N개 이상   
+	> ```dcredit=-N```: 숫자 N개 이상   
+	> ```maxrepeat=N```: 같은 문자가 N번 이상 연속해서 나오는지 검사   
+	> ```reject_username```: 사용자의 이름이 그대로 혹은 뒤집혀 패스워드에 있는지 검사   
+	> ```enforce_for_root```: root 사용자가 패스워드를 바꾸려 할 때에도 위 조건 적용   
+	> ```difok=N```: 기존 패스워드와 달라야하는 문자 수 N
+1. 현재 비밀번호가 조건에 않는 경우, 아래 명령어로 바꿀 수 있다.   
+```passwd -e <사용자ID>```   
+사용자가 다시 로그인을 해보면 비밀번호를 변경하라고 뜬다.
+	> ```-e```: 강제적으로 사용자의 암호를 만료시킨다.
 
 ## 호스트네임과 파티셔닝
 
