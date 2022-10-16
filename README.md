@@ -5,15 +5,15 @@ VM: **VirtualBox**
 OS: **Debian(Linux)**
 
 **Contents**
-- 가상머신 및 OS 설치 (VirtualBox, Debian)
-- sudo 설치 및 설정
-- 그룹 설정
-- vim 설치 및 설정
-- UFW 설치 및 설정
-- SSH 설치 및 설정
-- 비밀번호 정책 설정
-- 모니터링(cron, monitoring.sh)
-- 기타 정리
+- [가상머신 및 OS 설치 (VirtualBox, Debian)](https://github.com/Eucha09/Born2beroot#%EA%B0%80%EC%83%81%EB%A8%B8%EC%8B%A0-%EB%B0%8F-os-%EC%84%A4%EC%B9%98-virtualbox-debian)
+- [sudo 설치 및 설정](https://github.com/Eucha09/Born2beroot#sudo-%EC%84%A4%EC%B9%98-%EB%B0%8F-%EC%84%A4%EC%A0%95)
+- [그룹 설정](https://github.com/Eucha09/Born2beroot#%EA%B7%B8%EB%A3%B9-%EC%84%A4%EC%A0%95)
+- [vim 설치 및 설정](https://github.com/Eucha09/Born2beroot#vim-%EC%84%A4%EC%B9%98-%EB%B0%8F-%EC%84%A4%EC%A0%95)
+- [UFW 설치 및 설정](https://github.com/Eucha09/Born2beroot#ufw-%EC%84%A4%EC%B9%98-%EB%B0%8F-%EC%84%A4%EC%A0%95)
+- [SSH 설치 및 설정](https://github.com/Eucha09/Born2beroot#ssh-%EC%84%A4%EC%B9%98-%EB%B0%8F-%EC%84%A4%EC%A0%95)
+- [비밀번호 정책 설정](https://github.com/Eucha09/Born2beroot#%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8-%EC%A0%95%EC%B1%85-%EC%84%A4%EC%A0%95)
+- [모니터링(cron, monitoring.sh)](https://github.com/Eucha09/Born2beroot#%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81cron-monitoringsh)
+- [기타 정리](https://github.com/Eucha09/Born2beroot#%EA%B8%B0%ED%83%80-%EC%A0%95%EB%A6%AC)
 
 ## 가상머신 및 OS 설치 (VirtualBox, Debian)
 
