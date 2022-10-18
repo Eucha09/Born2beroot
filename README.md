@@ -13,7 +13,7 @@ OS: **Debian(Linux)**
 - [SSH 설치 및 설정](https://github.com/Eucha09/Born2beroot#ssh-%EC%84%A4%EC%B9%98-%EB%B0%8F-%EC%84%A4%EC%A0%95)
 - [비밀번호 정책 설정](https://github.com/Eucha09/Born2beroot#%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8-%EC%A0%95%EC%B1%85-%EC%84%A4%EC%A0%95)
 - [모니터링(cron, monitoring.sh)](https://github.com/Eucha09/Born2beroot#%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81cron-monitoringsh)
-- [기타 정리 및 자료]()
+- [기타 정리 및 자료](https://github.com/Eucha09/Born2beroot#%EA%B8%B0%ED%83%80-%EC%A0%95%EB%A6%AC-%EB%B0%8F-%EC%9E%90%EB%A3%8C)
 
 ## 가상머신 및 OS 설치 (VirtualBox, Debian)
 
@@ -328,12 +328,12 @@ ex)
 
 ## 기타 정리 및 자료
 
-- [간단한 체크]()
-- [User]()
-- [Hostname and partitions]()
-- [SUDO]()
-- [UFW]()
-- [SSH]()
+- [간단한 체크](https://github.com/Eucha09/Born2beroot/blob/main/simple_check.md)
+- [User](https://github.com/Eucha09/Born2beroot/blob/main/user.md)
+- [Hostname and partitions](https://github.com/Eucha09/Born2beroot/blob/main/Hostname_and_partitions.md)
+- [SUDO](https://github.com/Eucha09/Born2beroot/blob/main/sudo.md)
+- [UFW](https://github.com/Eucha09/Born2beroot/blob/main/ufw.md)
+- [SSH](https://github.com/Eucha09/Born2beroot/blob/main/ssh.md)
 - [Script monitoring]()
 - 알면 좋은 것들
 	- [리눅스란](https://coding-factory.tistory.com/m/318)
