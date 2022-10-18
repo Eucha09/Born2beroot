@@ -13,7 +13,7 @@ OS: **Debian(Linux)**
 - [SSH 설치 및 설정](https://github.com/Eucha09/Born2beroot#ssh-%EC%84%A4%EC%B9%98-%EB%B0%8F-%EC%84%A4%EC%A0%95)
 - [비밀번호 정책 설정](https://github.com/Eucha09/Born2beroot#%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8-%EC%A0%95%EC%B1%85-%EC%84%A4%EC%A0%95)
 - [모니터링(cron, monitoring.sh)](https://github.com/Eucha09/Born2beroot#%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81cron-monitoringsh)
-- [기타 정리](https://github.com/Eucha09/Born2beroot#%EA%B8%B0%ED%83%80-%EC%A0%95%EB%A6%AC)
+- [기타 정리 및 자료]()
 
 ## 가상머신 및 OS 설치 (VirtualBox, Debian)
 
@@ -154,9 +154,9 @@ Version: ```Debian(64-bit)```
 ```ufw status verbose```
 1. 부팅 시 ufw 활성화되게 설정   
 ```ufw enable```
-1. 기본 incoming deny로 설정   
+1. 기본 정책으로 incoming(외부에서 들어오는)에 대해 deny(거부)로 설정   
 ```ufw default deny```
-1. ssh 연결 허용   
+1. 4242 포트 허용(ssh 연결 때 사용할 포트)   
 ```ufw allow 4242```
 1. ufw 상태 확인 (active로 되어 있어야함)   
 ```ufw status verbose```
@@ -326,5 +326,18 @@ ex)
 	```*/10 * * * * /root/monitoring.sh | wall```
 	> 10분마다 monitoring.sh 스크립트를 실행시켜 모든 유저들에게 보내겠다는 의미
 
-## 기타 정리
+## 기타 정리 및 자료
 
+- [간단한 체크]()
+- [User]()
+- [Hostname and partitions]()
+- [SUDO]()
+- [UFW]()
+- [SSH]()
+- [Script monitoring]()
+- 알면 좋은 것들
+	- [리눅스란](https://coding-factory.tistory.com/m/318)
+	- [aptitude vs apt 차이](https://velog.io/@joonpark/aptitude-vs-apt)
+	- [apt vs apt-get 차이](https://yooloo.tistory.com/m/50)
+	- [AppArmor란](https://velog.io/@kdkeiie8/Linux-AppArmor-%EB%A6%AC%EB%88%85%EC%8A%A4-%EC%BB%A4%EB%84%90-%EB%B3%B4%EC%95%88-%EB%AA%A8%EB%93%88)
+	- [고정 ip 설정](https://nostressdev.tistory.com/3)
