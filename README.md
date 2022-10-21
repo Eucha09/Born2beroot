@@ -296,9 +296,9 @@ ex)
 	printf "#LVM use: "
 	if [ "$(cat /etc/fstab | grep '/dev/mapper/' | wc -l)" -gt 0 ];
 	then
-	echo 'yes'
+		echo 'yes'
 	else
-	echo 'no'
+		echo 'no'
 	fi
 
 	connections=$(ss -t | grep -i ESTAB | wc -l)
@@ -312,7 +312,8 @@ ex)
 	printf "#Network: IP $ip ($mac)\n"
 
 	printf "#Sudo: "
-	sudo grep "sudo: " /var/log/auth.log | grep "COMMAND=" | wc -l | tr -d '\n'
+	grep "sudo: " /var/log/auth.log | grep "COMMAND=" | wc -l | tr -d '\n'
+	printf " cmd\n"
 	```
 1. monitoring.sh에 실행권환 설정  
 ```chmod +x monitoring.sh```

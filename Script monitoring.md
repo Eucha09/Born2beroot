@@ -42,7 +42,7 @@ cat /proc/cpuinfo | grep "processor" | wc -l
 
 ```sh
 printf "#Memory Usage: "
-free -m | grep "Mem" | awk '{printf "%d/%dMB (%.2f%%)", $3, $2, $3 / $2 * 100}'
+free -m | grep Mem | awk '{printf "%d/%dMB (%.2f%%)", $3, $2, $3 / $2 * 100}'
 printf "\n"
 ```
 
@@ -109,10 +109,10 @@ who -b | sed 's/system boot//g' | sed 's/^ *//g'
 ```sh
 printf "#LVM use: "
 if [ "$(cat /etc/fstab | grep '/dev/mapper/' | wc -l)" -gt 0 ];
- then
-  echo 'yes'
- else
-  echo 'no'
+then
+	echo 'yes'
+else
+	echo 'no'
 fi
 ```
 
@@ -132,7 +132,7 @@ printf "#Connexions TCP: $connections ESTABLISHED\n"
 - ```-t``` : TCP 소켓만 출력
 - ```ESTAB```의 의미 : Established, 서버와 클라이언트 간에 세션 연결이 성립되어 통신이 이루어지고 있는 상태
 
-### 서버를 사용하는 사용자 수 출력
+### 서버에 접속해 있는 사용자 수 출력
 
 ```sh
 printf "#User log: "
@@ -147,7 +147,6 @@ who | wc -l
 ```sh
 ip=$(hostname -I)
 mac=$(ip addr | grep "ether " |  sed "s/.*ether //g" | sed "s/ brd.*//g")
-
 printf "#Network: IP $ip ($mac)\n"
 ```
 
@@ -157,7 +156,8 @@ printf "#Network: IP $ip ($mac)\n"
 
 ```sh
 printf "#Sudo: "
-sudo grep "sudo: " /var/log/auth.log | grep "COMMAND=" | wc -l | tr -d '\n'
+grep "sudo: " /var/log/auth.log | grep "COMMAND=" | wc -l | tr -d '\n'
+printf " cmd\n"
 ```
 
 ```/var/log/auth.log``` : 사용자 로그인이나 사용된 인증방법같은 시스템 인증 정보가 기록되어 있다.
