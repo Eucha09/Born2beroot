@@ -30,7 +30,7 @@
 
 ### UFW 규칙 삭제
 
-```sudo delete <규칙번호>```
+```sudo ufw delete <규칙번호>```
 
 ### 그 외 설정하는 법
 
