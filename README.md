@@ -244,8 +244,8 @@ Version: ```Debian(64-bit)```
 - 프로세서(CPU)의 현재 사용률(백분율)
 - 마지막으로 부팅한 날짜 및 시간
 - LVM의 활성 여부
-- 활성 연결 수
-- 서버를 사용하는 사용자 수
+- 활성화된 연결 수
+- 서버에 접속해 있는 사용자 수
 - 서버의 IPv4 주소와 해당 MAC 주소
 - sudo 프로그램으로 실행된 명령 수
 
@@ -273,48 +273,46 @@ ex)
 	printf "#Architecture: "
 	uname -a
 
-	printf "#CPU physical : "
+	printf "#CPU physical: "
 	nproc --all
 
-	printf "#vCPU : "
-	cat /proc/cpuinfo | grep processor | wc -l
+	printf "#vCPU :"
+	cat /proc/cpuinfo | grep "processor" | wc -l
 
 	printf "#Memory Usage: "
-	free -m | grep Mem | awk '{printf"%d/%dMB (%.2f%%)\n", $3, $2, $3/$2 * 100}'
+	free -m | grep Mem | awk '{printf "%d/%dMB (%.2f%%)", $3, $2, $3 / $2 * 100}'
+	printf "\n"
 
 	printf "#Disk Usage: "
-	df -a -BM | grep /dev/map | awk '{sum+=$3}END{print sum}' | tr -d '\n'
-	printf "/"
-	df -a -BM | grep /dev/map | awk '{sum+=$4}END{print sum}' | tr -d '\n'
-	printf "MB ("
-	df -a -BM | grep /dev/map | awk '{sum1+=$3 ; sum2+=$4 }END{printf "%d", sum1 / sum2 * 100}' | tr -d '\n'
-	printf "%%)\n"
+	df -P | grep -v ^Filesystem | awk '{sum += $3} {sum2 += $2} END {printf "%d/%dGB (%d%%)", sum/1024, sum2/1024/1024, sum/sum2*100 }'
+	printf  "\n"
 
 	printf "#CPU load: "
-	mpstat | grep all | awk '{printf "%.2f%%\n", 100-$13}'
+	top -b -n 1 | grep -Po '[0-9.]+ id' | awk '{print 100 - $1}'
 
 	printf "#Last boot: "
-	who -b | awk '{printf $3" "$4"\n"}'
+	who -b | sed 's/system boot//g' | sed 's/^ *//g'
 
 	printf "#LVM use: "
-	if [ "$(lsblk | grep lvm | wc -l)" -gt 0 ] ; then printf "yes\n" ; else printf "no\n" ; fi
+	if [ "$(cat /etc/fstab | grep '/dev/mapper/' | wc -l)" -gt 0 ];
+	then
+	echo 'yes'
+	else
+	echo 'no'
+	fi
 
-	printf "#Connections TCP : "
-	ss | grep -i tcp | wc -l | tr -d '\n'
-	printf " ESTABLISHED\n"
+	connections=$(ss -t | grep -i ESTAB | wc -l)
+	printf "#Connexions TCP: $connections ESTABLISHED\n"
 
 	printf "#User log: "
 	who | wc -l
 
-	printf "#Network: IP "
-	hostname -I | tr -d '\n'
-	printf "("
-	ip link show | awk '$1 == "link/ether" {print $2}' | sed '2, $d' | tr -d '\n'
-	printf ")\n"
+	ip=$(hostname -I)
+	mac=$(ip addr | grep "ether " |  sed "s/.*ether //g" | sed "s/ brd.*//g")
+	printf "#Network: IP $ip ($mac)\n"
 
-	printf "#Sudo : "
-	journalctl _COMM=sudo | wc -l | tr -d '\n'
-	printf " cmd\n"
+	printf "#Sudo: "
+	sudo grep "sudo: " /var/log/auth.log | grep "COMMAND=" | wc -l | tr -d '\n'
 	```
 1. monitoring.sh에 실행권환 설정  
 ```chmod +x monitoring.sh```

@@ -2,7 +2,7 @@
 
 일정한 시간마다 모든 터미널에 아래 정보를 표시하는 스크립트를 작성
 
-### 운영체제 및 커널 버전의 아키텍처
+### 운영체제 및 커널 버전의 아키텍처 출력
 
 ```sh
 printf "#Architecture: "
@@ -14,7 +14,7 @@ uname -a
 
 참고 : [uname 명령어에 대한 설명](https://udpark.tistory.com/99)
 
-### 물리적 프로세서의 수
+### 물리적 프로세서의 수 출력
 
 ```sh
 printf "#CPU physical: "
@@ -26,7 +26,7 @@ nproc --all
 
 참고 : [Linux nproc 명령 자습서](https://ciksiti.com/ko/chapters/1418-linux-nproc-command-tutorial--linux-hint)
 
-### 가상 프로세서 개수
+### 가상 프로세서 개수 출력
 
 ```sh
 printf "#vCPU :"
@@ -38,7 +38,7 @@ cat /proc/cpuinfo | grep "processor" | wc -l
 
 참고 : [How to Display the Number of Processors (vCPU) on Linux VPS](https://webhostinggeeks.com/howto/how-to-display-the-number-of-processors-vcpu-on-linux-vps/)
 
-### 서버에서 현재 사용 가능한 RAM용량 및 사용률(백분율)
+### 서버에서 현재 사용 가능한 RAM용량 및 사용률(백분율) 출력
 
 ```sh
 printf "#Memory Usage: "
@@ -53,7 +53,7 @@ printf "\n"
 [리눅스 awk 명령어 사용법](https://recipes4dev.tistory.com/171)
 
 
-### 서버에서 사용 가능한 현재 디스크공간 및 사용률(백분율)
+### 서버에서 사용 가능한 현재 디스크공간 및 사용률(백분율) 출력
 
 ```sh
 printf "#Disk Usage: "
@@ -69,7 +69,7 @@ printf  "\n"
 
 참고 : [리눅스 전체 디스크 사용량 확인](https://zetawiki.com/wiki/%EB%A6%AC%EB%88%85%EC%8A%A4_%EC%A0%84%EC%B2%B4_%EB%94%94%EC%8A%A4%ED%81%AC_%EC%82%AC%EC%9A%A9%EB%9F%89_%ED%99%95%EC%9D%B8)
 
-### 프로세서(CPU)의 현재 사용률(백분율)
+### 프로세서(CPU)의 현재 사용률(백분율) 출력
 
 ```sh
 printf "#CPU load: "
@@ -89,7 +89,7 @@ top -b -n 1 | grep -Po '[0-9.]+ id' | awk '{print 100 - $1}'
 [리눅스 grep 명령어 사용법](https://recipes4dev.tistory.com/157)   
 [Perl](https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=new27kr&logNo=221002842931)
 
-### 마지막으로 부팅한 날짜 및 시간
+### 마지막으로 부팅한 날짜 및 시간 출력
 
 ```sh
 printf "#Last boot: "
@@ -104,7 +104,7 @@ who -b | sed 's/system boot//g' | sed 's/^ *//g'
 
 참고 : [[리눅스 명령어] who](https://shaeod.tistory.com/623)   
 
-### LVM의 사용 여부
+### LVM의 사용 여부 출력
 
 ```sh
 printf "#LVM use: "
@@ -121,7 +121,7 @@ fi
 
 참고 : [How do I check whether I am using LVM?](https://askubuntu.com/questions/202613/how-do-i-check-whether-i-am-using-lvm)
 
-### 활성화된 연결 수
+### 활성화된 연결 수 출력
 
 ```sh
 connections=$(ss -t | grep -i ESTAB | wc -l)
@@ -132,7 +132,7 @@ printf "#Connexions TCP: $connections ESTABLISHED\n"
 - ```-t``` : TCP 소켓만 출력
 - ```ESTAB```의 의미 : Established, 서버와 클라이언트 간에 세션 연결이 성립되어 통신이 이루어지고 있는 상태
 
-### 서버를 사용하는 사용자 수
+### 서버를 사용하는 사용자 수 출력
 
 ```sh
 printf "#User log: "
@@ -142,7 +142,7 @@ who | wc -l
 ```who``` : 호스트에 로그인한 사용자의 정보 출력
 
 
-### 서버의 IPv4 주소와 해당 MAC 주소
+### 서버의 IPv4 주소와 해당 MAC 주소 출력
 
 ```sh
 ip=$(hostname -I)
@@ -153,7 +153,7 @@ printf "#Network: IP $ip ($mac)\n"
 
 ```ether``` 뒤에 오는게 MAC 주소
 
-### sudo 프로그램으로 실행된 명령 수
+### sudo 프로그램으로 실행된 명령 수 출력
 
 ```sh
 printf "#Sudo: "

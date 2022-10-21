@@ -35,6 +35,19 @@
 
  	예를 들어보면 사용자 또는 서버는 하나의 대칭 키를 만들어 서로 공유한다. 공유된 대칭 키를 이용해 정보를 암호화하면, 받은 쪽에서 동일한 대칭 키로 암호를 풀어 정보를 습득하게 된다. 정보 교환이 완료되면 교환 당시 썼던 대칭 키는 폐기되고, 나중에 다시 접속할 때마다 새로운 대칭 키를 생성하여 사용하게 된다.
 
+**SSH key 생성 및 접속하는 법**
+
+[SSH Key 강의 영상](https://www.youtube.com/watch?v=qkGaUqlH47s&t=38s) 참고   
+
+- Client   
+```ssh-keygen -t rsa```   
+```scp -P 4242 ~/.ssh/id_rsa.pub eujeong@10.28.4.9:~/id_rsa.pub```   
+- Server   
+```mkdir .ssh```   
+```chmod 700 .ssh```   
+```cat id_rsa.pub >> .ssh/authorized_keys```
+
+
 ### SSH 상태 확인
 
 ```systemctl status ssh```
