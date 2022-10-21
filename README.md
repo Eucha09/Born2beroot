@@ -332,7 +332,7 @@ ex)
 - [SUDO](https://github.com/Eucha09/Born2beroot/blob/main/sudo.md)
 - [UFW](https://github.com/Eucha09/Born2beroot/blob/main/ufw.md)
 - [SSH](https://github.com/Eucha09/Born2beroot/blob/main/ssh.md)
-- [Script monitoring]()
+- [Script monitoring](https://github.com/Eucha09/Born2beroot/blob/main/Script%20monitoring.md)
 - 알면 좋은 것들
 	- [리눅스란](https://coding-factory.tistory.com/m/318)
 	- [aptitude vs apt 차이](https://velog.io/@joonpark/aptitude-vs-apt)
